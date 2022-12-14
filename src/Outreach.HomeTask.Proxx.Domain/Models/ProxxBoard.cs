@@ -14,8 +14,6 @@ internal class ProxxBoard
     public ProxxCellWithLogic[][] Board { get; set; }
     public int NumberOfBlackHoles { get; }
 
-    // Ther requirements said that width and lenght should be the same (NxN board)
-    // For the real game I'd prefer to separate width and lenght
     public ProxxBoard(int height, int width, int numberOfBlackHoles)
     {
         if (height is < ConstMinSideLenght or > ConstMaxSideLenght)

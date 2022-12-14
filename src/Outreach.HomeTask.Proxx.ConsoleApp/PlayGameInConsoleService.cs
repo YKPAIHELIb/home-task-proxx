@@ -34,16 +34,23 @@ public class PlayGameInConsoleService
                 - reveal specifig cell on board and keep revealed state
                 - recursievly reveal adjacent cells if hit on empty cell (with no adjancent black holes)
                 - return the hint of possible actions for real game on each click on cell
+                - recognize and keep win/lose state of game
+
+            The console app is able to:
+                - start new game, allow to enter the input values
+                - draw the board as for player (hide non-revealed cells) or as for tester (show all board as revealed)
+                - "click" on cell by typing a command
+                - see the result of "click"
 
             What can be improved:
                 - generate the field after first click so user never hits the black hole on game start
-                - rectangular board (different width and height)
-
+            
             -------------------------------------------
 
             To start new game type "new"
+            To draw field with all info revealed type "draw"
             To click on cell type "cell <i> <j>"
-            To exit type "exit"
+            To exit type "exit" (or press CTRL+C)
             """);
 
         IProxxGame? proxxGame = null;
@@ -58,6 +65,15 @@ public class PlayGameInConsoleService
             else if (userInput?.StartsWith("cell") == true)
             {
                 ClickOnCell(userInput, proxxGame);
+            }
+            else if (userInput == "draw")
+            {
+                if (proxxGame == null)
+                {
+                    Console.WriteLine("Please start new game first");
+                    continue;
+                }
+                DrawField(proxxGame, true);
             }
             else if (userInput == "exit")
             {
@@ -74,6 +90,8 @@ public class PlayGameInConsoleService
 
             Thank you for your time.
             Good bye!
+
+
             """);
     }
 
@@ -104,13 +122,14 @@ public class PlayGameInConsoleService
                 Console.WriteLine("Here is the board created for the game: ");
                 Console.WriteLine();
 
-                DrawField(proxxGame);
+                DrawField(proxxGame, false);
 
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine("""
                     To start new game type "new"
                     To click on cell type "cell <i> <j>"
+                    To draw field with all info revealed type "draw"
                     To exit type "exit"
                     """);
                 Console.WriteLine();
@@ -125,7 +144,7 @@ public class PlayGameInConsoleService
         }
     }
 
-    private static void DrawField(IProxxGame proxxGame)
+    private static void DrawField(IProxxGame proxxGame, bool revealAll)
     {
         //write top numbers (tens)
         int currentWidth = proxxGame.Width;
@@ -153,6 +172,7 @@ public class PlayGameInConsoleService
             {
                 char toWrite = proxxGame.Board[i][j] switch
                 {
+                    { IsRevealed: false } when !revealAll => '#',
                     { IsBlackHole: true } => 'X',
                     { AdjacentBlackHolesNumber: 0 } => ' ',
                     ProxxCell cell => cell.AdjacentBlackHolesNumber!.Value.ToString()[0]
@@ -181,6 +201,16 @@ public class PlayGameInConsoleService
             return;
         }
 
+        if (proxxGame.GameFinishedWithAction != null)
+        {
+            string message = proxxGame.GameFinishedWithAction == ClickOnFieldResultActionEnum.GameWin
+                ? "You win. Start new Game or review current."
+                : "Game over. Start new Game or review current.";
+
+            Console.WriteLine(message);
+            return;
+        }
+
         string[] strValues = userInput.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         int i = int.Parse(strValues[1]);
         int j = int.Parse(strValues[2]);
@@ -188,13 +218,18 @@ public class PlayGameInConsoleService
         try
         {
             ClickOnFieldResultActionEnum clickResultAction = proxxGame.ClickOnCell(i, j);
+
+            Console.WriteLine();
+            DrawField(proxxGame, false);
+            Console.WriteLine();
+
             string message = clickResultAction switch
             {
-                ClickOnFieldResultActionEnum.NothingToDo => "Cell is already revealed. Nothing to do.",
-                ClickOnFieldResultActionEnum.RedrawCell => "Cell became revealed. Redraw of cell might be needed.",
-                ClickOnFieldResultActionEnum.RedrawBoard => "Cell became revealed along with adjacent cells. Redraw of the board might be needed.",
-                ClickOnFieldResultActionEnum.GameOver => "Game over. Displaying the message to gamer might be needed.",
-                ClickOnFieldResultActionEnum.GameWin => "Game win. Displaying the message to gamer might be needed.",
+                ClickOnFieldResultActionEnum.NothingToDo => "Cell is already revealed.",
+                ClickOnFieldResultActionEnum.RedrawCell => "Cell with number became revealed.",
+                ClickOnFieldResultActionEnum.RedrawBoard => "Empty cell became revealed along with adjacent cells.",
+                ClickOnFieldResultActionEnum.GameOver => "Game over.",
+                ClickOnFieldResultActionEnum.GameWin => "You win.",
                 _ => throw new Exception("Unreachable code")
             };
 

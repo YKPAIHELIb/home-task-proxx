@@ -8,11 +8,11 @@ namespace Outreach.HomeTask.Proxx.Domain.Services;
 public class ProxxGame : IProxxGame
 {
     private readonly ProxxBoard _board;
-    private ClickOnFieldResultActionEnum? _gameFinishedWithAction;
 
     public int Height { get; }
     public int Width { get; }
     public int NumberOfBlackHoles { get; }
+    public ClickOnFieldResultActionEnum? GameFinishedWithAction { get; private set; }
     public ProxxCell[][] Board => _board.Board;
 
     public ProxxGame(int height, int width, int numberOfBlackHoles)
@@ -34,9 +34,9 @@ public class ProxxGame : IProxxGame
             throw new ProxxInvalidInputException($"Width index was out of range of [0:{Width})");
         }
 
-        if (_gameFinishedWithAction != null)
+        if (GameFinishedWithAction != null)
         {
-            return _gameFinishedWithAction.Value;
+            return GameFinishedWithAction.Value;
         }
 
         ClickOnFieldResultActionEnum resultAction = _board.Board[i][j].Reveal() switch
@@ -50,7 +50,7 @@ public class ProxxGame : IProxxGame
 
         if (resultAction is ClickOnFieldResultActionEnum.GameOver or ClickOnFieldResultActionEnum.GameWin)
         {
-            _gameFinishedWithAction = resultAction;
+            GameFinishedWithAction = resultAction;
         }
 
         return resultAction;

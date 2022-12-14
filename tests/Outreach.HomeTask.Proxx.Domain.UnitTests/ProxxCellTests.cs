@@ -207,7 +207,7 @@ public class ProxxCellTests
         return Enumerable.Range(0, allCellsCount).Select(i => new ProxxCellWithLogic(i < blackHolesCount)).ToList();
     }
 
-    private static IEnumerable<object[]> AllCorrectNumbersOfAdjacentBlackHoles() => new[]
+    public static IEnumerable<object[]> AllCorrectNumbersOfAdjacentBlackHoles() => new[]
     {
         new object[] { 0 },
         new object[] { 1 },
@@ -220,7 +220,7 @@ public class ProxxCellTests
         new object[] { 8 }
     };
 
-    private static IEnumerable<object[]> AllCorrectNumbersOfExistingAdjacentBlackHoles() => new[]
+    public static IEnumerable<object[]> AllCorrectNumbersOfExistingAdjacentBlackHoles() => new[]
     {
         new object[] { 1 },
         new object[] { 2 },

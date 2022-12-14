@@ -15,7 +15,7 @@ internal sealed class ProxxCellWithLogic : ProxxCell
 
     public void Initialize(IList<ProxxCellWithLogic> adjacentCells)
     {
-        // it's redundant here as only our code calls this method but just to show that I know about input validations
+        // it's redundant here as only our code calls this method but just to show that I know about input validations :)
         if (adjacentCells.Count is > 8 or < 3)
         {
             throw new ProxxInvalidInputException("Number of adjacent cell cannot be bigger than 8 or less than 3");
