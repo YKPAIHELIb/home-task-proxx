@@ -44,7 +44,7 @@ public class ProxxGameTests
 
         //Act
         ProxxInvalidInputException exception = Assert.Throws<ProxxInvalidInputException>(() =>
-            game.ClickOnField(15, 4));
+            game.ClickOnCell(15, 4));
 
         //Assert
         exception.Message.Should().Be("Index was out of range of [0:10)");
@@ -58,10 +58,10 @@ public class ProxxGameTests
         const int numbersOfBlackHoles = 20;
         ProxxGame game = new ProxxGame(sideLength, numbersOfBlackHoles);
 
-        game.ClickOnField(1, 1);
+        game.ClickOnCell(1, 1);
 
         //Act
-        ClickOnFieldResultActionEnum result = game.ClickOnField(1, 1);
+        ClickOnFieldResultActionEnum result = game.ClickOnCell(1, 1);
 
         //Assert
         result.Should().Be(ClickOnFieldResultActionEnum.NothingToDo);
@@ -78,7 +78,7 @@ public class ProxxGameTests
         (_, int i, int j) = game.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.AdjacentBlackHolesNumber == 0);
 
         //Act
-        ClickOnFieldResultActionEnum result = game.ClickOnField(i, j);
+        ClickOnFieldResultActionEnum result = game.ClickOnCell(i, j);
 
         //Assert
         result.Should().Be(ClickOnFieldResultActionEnum.RedrawBoard);
@@ -95,7 +95,7 @@ public class ProxxGameTests
         (_, int i, int j) = game.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.AdjacentBlackHolesNumber > 0);
 
         //Act
-        ClickOnFieldResultActionEnum result = game.ClickOnField(i, j);
+        ClickOnFieldResultActionEnum result = game.ClickOnCell(i, j);
 
         //Assert
         result.Should().Be(ClickOnFieldResultActionEnum.RedrawCell);
@@ -112,7 +112,7 @@ public class ProxxGameTests
         (_, int i, int j) = game.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.IsBlackHole);
 
         //Act
-        ClickOnFieldResultActionEnum result = game.ClickOnField(i, j);
+        ClickOnFieldResultActionEnum result = game.ClickOnCell(i, j);
 
         //Assert
         result.Should().Be(ClickOnFieldResultActionEnum.GameOver);

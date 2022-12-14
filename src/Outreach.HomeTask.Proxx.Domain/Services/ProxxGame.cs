@@ -20,7 +20,7 @@ public class ProxxGame : IProxxGame
         _board = new(sideLength, numberOfBlackHoles);
     }
 
-    public ClickOnFieldResultActionEnum ClickOnField(int i, int j)
+    public ClickOnFieldResultActionEnum ClickOnCell(int i, int j)
     {
         if (i < 0 || i >= SideLength || j < 0 || j >= SideLength)
         {

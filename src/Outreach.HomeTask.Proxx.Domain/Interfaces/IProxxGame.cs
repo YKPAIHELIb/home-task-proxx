@@ -7,5 +7,5 @@ public interface IProxxGame
 {
     ProxxCell[][] Board { get; }
 
-    ClickOnFieldResultActionEnum ClickOnField(int i, int j);
+    ClickOnFieldResultActionEnum ClickOnCell(int i, int j);
 }
