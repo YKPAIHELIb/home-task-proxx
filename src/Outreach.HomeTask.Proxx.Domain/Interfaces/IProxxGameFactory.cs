@@ -2,5 +2,5 @@
 
 public interface IProxxGameFactory
 {
-    IProxxGame CreateProxxGame(int sideLength, int numberOfBlackHoles);
+    IProxxGame CreateProxxGame(int height, int width, int numberOfBlackHoles);
 }

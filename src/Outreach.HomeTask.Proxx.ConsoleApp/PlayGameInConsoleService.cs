@@ -80,25 +80,26 @@ public class PlayGameInConsoleService
     private IProxxGame CreateNewGame()
     {
         Console.Clear();
-        Console.WriteLine("New game. Enter board side length and number of black holes (space separated):");
-        Console.WriteLine("Example: 10 10");
+        Console.WriteLine("New game. Enter board height, width and number of black holes (space separated):");
+        Console.WriteLine("Example: 5 10 8");
 
         while (true)
         {
             try
             {
                 string? userInput = Console.ReadLine();
-                while (string.IsNullOrEmpty(userInput) || !Regex.IsMatch(userInput, @"^\d+ +\d+$"))
+                while (string.IsNullOrEmpty(userInput) || !Regex.IsMatch(userInput, @"^\d+ +\d+ +\d+$"))
                 {
                     Console.WriteLine("Invalid input. Try again.");
                     userInput = Console.ReadLine();
                 }
 
                 string[] strValues = userInput.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                int sideLength = int.Parse(strValues[0]);
-                int numberOfBlackHoles = int.Parse(strValues[1]);
+                int height = int.Parse(strValues[0]);
+                int width = int.Parse(strValues[1]);
+                int numberOfBlackHoles = int.Parse(strValues[2]);
 
-                IProxxGame proxxGame = _proxxGameFactory.CreateProxxGame(sideLength, numberOfBlackHoles);
+                IProxxGame proxxGame = _proxxGameFactory.CreateProxxGame(height, width, numberOfBlackHoles);
 
                 Console.WriteLine("Here is the board created for the game: ");
                 Console.WriteLine();
@@ -126,10 +127,28 @@ public class PlayGameInConsoleService
 
     private static void DrawField(IProxxGame proxxGame)
     {
-        Console.WriteLine(new string('#', proxxGame.Board[0].Length + 2));
+        //write top numbers (tens)
+        int currentWidth = proxxGame.Width;
+        string topNumbersTensString = "";
+        for (int tenNumber = 0; currentWidth > 0; tenNumber++, currentWidth -= 10)
+        {
+            char symbol = tenNumber == 0 ? ' ' : tenNumber.ToString()[0];
+            topNumbersTensString += new string(symbol, currentWidth >= 10 ? 10 : currentWidth);
+        }
+        Console.WriteLine("   " + topNumbersTensString);
+
+        //write top numbers (ones)
+        string allDigits = "0123456789";
+        string topNumbersOnesString = string.Concat(Enumerable.Repeat(allDigits, proxxGame.Width / 10)) + allDigits.Substring(0, proxxGame.Width % 10);
+        Console.WriteLine("   " + topNumbersOnesString);
+
+        Console.Write("  ");
+        Console.Write(new string('█', proxxGame.Board[0].Length + 2));
+        Console.WriteLine();
+
         for (int i = 0; i < proxxGame.Board.Length; i++)
         {
-            Console.Write('#');
+            Console.Write($"{i,2}█");
             for (int j = 0; j < proxxGame.Board[0].Length; j++)
             {
                 char toWrite = proxxGame.Board[i][j] switch
@@ -140,9 +159,12 @@ public class PlayGameInConsoleService
                 };
                 Console.Write(toWrite);
             }
-            Console.WriteLine('#');
+            Console.WriteLine('█');
         }
-        Console.WriteLine(new string('#', proxxGame.Board[0].Length + 2));
+
+        Console.Write("  ");
+        Console.Write(new string('█', proxxGame.Board[0].Length + 2));
+        Console.WriteLine();
     }
 
     private static void ClickOnCell(string userInput, IProxxGame? proxxGame)

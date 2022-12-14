@@ -5,6 +5,9 @@ namespace Outreach.HomeTask.Proxx.Domain.Interfaces;
 
 public interface IProxxGame
 {
+    int Height { get; }
+    int Width { get; }
+    int NumberOfBlackHoles { get; }
     ProxxCell[][] Board { get; }
 
     ClickOnFieldResultActionEnum ClickOnCell(int i, int j);

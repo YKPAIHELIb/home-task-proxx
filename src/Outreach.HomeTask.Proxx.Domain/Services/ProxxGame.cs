@@ -8,26 +8,38 @@ namespace Outreach.HomeTask.Proxx.Domain.Services;
 public class ProxxGame : IProxxGame
 {
     private readonly ProxxBoard _board;
+    private ClickOnFieldResultActionEnum? _gameFinishedWithAction;
 
-    public int SideLength { get; }
+    public int Height { get; }
+    public int Width { get; }
     public int NumberOfBlackHoles { get; }
     public ProxxCell[][] Board => _board.Board;
 
-    public ProxxGame(int sideLength, int numberOfBlackHoles)
+    public ProxxGame(int height, int width, int numberOfBlackHoles)
     {
-        SideLength = sideLength;
+        Height = height;
+        Width = width;
         NumberOfBlackHoles = numberOfBlackHoles;
-        _board = new(sideLength, numberOfBlackHoles);
+        _board = new(height, width, numberOfBlackHoles);
     }
 
     public ClickOnFieldResultActionEnum ClickOnCell(int i, int j)
     {
-        if (i < 0 || i >= SideLength || j < 0 || j >= SideLength)
+        if (i < 0 || i >= Height)
         {
-            throw new ProxxInvalidInputException($"Index was out of range of [0:{SideLength})");
+            throw new ProxxInvalidInputException($"Height index was out of range of [0:{Height})");
+        }
+        if (j < 0 || j >= Width)
+        {
+            throw new ProxxInvalidInputException($"Width index was out of range of [0:{Width})");
         }
 
-        return _board.Board[i][j].Reveal() switch
+        if (_gameFinishedWithAction != null)
+        {
+            return _gameFinishedWithAction.Value;
+        }
+
+        ClickOnFieldResultActionEnum resultAction = _board.Board[i][j].Reveal() switch
         {
             RevealResultEnum.AlreadyRevealed => ClickOnFieldResultActionEnum.NothingToDo,
             RevealResultEnum.ContainsBlackHole => ClickOnFieldResultActionEnum.GameOver,
@@ -35,6 +47,13 @@ public class ProxxGame : IProxxGame
             RevealResultEnum.ContainsNumber => CheckWin() ? ClickOnFieldResultActionEnum.GameWin : ClickOnFieldResultActionEnum.RedrawCell,
             _ => throw new Exception("Unreachable code")
         };
+
+        if (resultAction is ClickOnFieldResultActionEnum.GameOver or ClickOnFieldResultActionEnum.GameWin)
+        {
+            _gameFinishedWithAction = resultAction;
+        }
+
+        return resultAction;
     }
 
     private bool CheckWin()

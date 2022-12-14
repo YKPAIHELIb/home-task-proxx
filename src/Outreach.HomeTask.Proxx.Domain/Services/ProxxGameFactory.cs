@@ -4,8 +4,8 @@ namespace Outreach.HomeTask.Proxx.Domain.Services;
 
 public class ProxxGameFactory : IProxxGameFactory
 {
-    public IProxxGame CreateProxxGame(int sideLength, int numberOfBlackHoles)
+    public IProxxGame CreateProxxGame(int height, int width, int numberOfBlackHoles)
     {
-        return new ProxxGame(sideLength, numberOfBlackHoles);
+        return new ProxxGame(height, width, numberOfBlackHoles);
     }
 }

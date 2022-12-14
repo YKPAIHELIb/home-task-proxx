@@ -9,46 +9,53 @@ public class ProxxBoardTests
 {
     [Theory]
     //testing side length validation
-    [InlineData(-1, 5, "Side lenth is out of allowed ranges [5, 40]")]
-    [InlineData(0, 5, "Side lenth is out of allowed ranges [5, 40]")]
-    [InlineData(2, 5, "Side lenth is out of allowed ranges [5, 40]")]
-    [InlineData(4, 5, "Side lenth is out of allowed ranges [5, 40]")]
-    [InlineData(41, 5, "Side lenth is out of allowed ranges [5, 40]")]
-    [InlineData(50, 5, "Side lenth is out of allowed ranges [5, 40]")]
-    [InlineData(100, 5, "Side lenth is out of allowed ranges [5, 40]")]
+    [InlineData(-1, -1, 5, "Height is out of allowed ranges [5, 40]")]
+    [InlineData(0, 0, 5, "Height is out of allowed ranges [5, 40]")]
+    [InlineData(2, 2, 5, "Height is out of allowed ranges [5, 40]")]
+    [InlineData(4, 4, 5, "Height is out of allowed ranges [5, 40]")]
+    [InlineData(41, 41, 5, "Height is out of allowed ranges [5, 40]")]
+    [InlineData(50, 50, 5, "Height is out of allowed ranges [5, 40]")]
+    [InlineData(100, 100, 5, "Height is out of allowed ranges [5, 40]")]
+    [InlineData(5, -1, 5, "Width is out of allowed ranges [5, 40]")]
+    [InlineData(5, 0, 5, "Width is out of allowed ranges [5, 40]")]
+    [InlineData(5, 2, 5, "Width is out of allowed ranges [5, 40]")]
+    [InlineData(5, 4, 5, "Width is out of allowed ranges [5, 40]")]
+    [InlineData(5, 41, 5, "Width is out of allowed ranges [5, 40]")]
+    [InlineData(5, 50, 5, "Width is out of allowed ranges [5, 40]")]
+    [InlineData(5, 100, 5, "Width is out of allowed ranges [5, 40]")]
     //tesing number of black holes validation
-    [InlineData(5, 0, "Number of black holes cannot be 0")]
-    [InlineData(5, 17, "Number of black holes cannot be bigger than 16 for 5x5 field")] // too high as the rule says 5*5-9 = 16 is upper limit
-    [InlineData(5, 300, "Number of black holes cannot be bigger than 16 for 5x5 field")]
-    [InlineData(30, 0, "Number of black holes cannot be 0")]
-    [InlineData(30, 892, "Number of black holes cannot be bigger than 891 for 30x30 field")] // too high as the rule says 30*30-9 = 892 is upper limit
-    [InlineData(30, 1000, "Number of black holes cannot be bigger than 891 for 30x30 field")]
-    public void GivenWrongSideLenghtOrNumberOfBlackHoles_When_CreateBoard_Then_ExceptionIsThrown(int sideLength, int numberOfBlackHoles, string expectedErrorMessage)
+    [InlineData(5, 6, 0, "Number of black holes cannot be 0")]
+    [InlineData(5, 6, 22, "Number of black holes cannot be bigger than 21 for 5x6 field")] // too high as the rule says 5*6-9 = 21 is upper limit
+    [InlineData(5, 6, 300, "Number of black holes cannot be bigger than 21 for 5x6 field")]
+    [InlineData(30, 30, 0, "Number of black holes cannot be 0")]
+    [InlineData(30, 30, 892, "Number of black holes cannot be bigger than 891 for 30x30 field")] // too high as the rule says 30*30-9 = 891 is upper limit
+    [InlineData(30, 30, 1000, "Number of black holes cannot be bigger than 891 for 30x30 field")]
+    public void GivenWrongSideLenghtOrNumberOfBlackHoles_When_CreateBoard_Then_ExceptionIsThrown(int height, int width, int numberOfBlackHoles, string expectedErrorMessage)
     {
         //Act
         ProxxInvalidInputException exception = Assert.Throws<ProxxInvalidInputException>(() =>
-            new ProxxBoard(sideLength, numberOfBlackHoles));
+            new ProxxBoard(height, width, numberOfBlackHoles));
 
         //Assert
         exception.Message.Should().Be(expectedErrorMessage);
     }
 
     [Theory]
-    [InlineData(5, 5)]
-    [InlineData(5, 16)]
-    [InlineData(10, 1)]
-    [InlineData(10, 10)]
-    [InlineData(10, 88)]
-    [InlineData(10, 91)]
-    [InlineData(40, 1)]
-    [InlineData(40, 25)]
-    [InlineData(40, 1000)]
-    [InlineData(40, 1590)]
-    [InlineData(40, 1591)]
-    public void GivenCorrectSideLenghtAndNumberOfBlackHoles_When_CreateBoard_Then_NoError(int sideLength, int numberOfBlackHoles)
+    [InlineData(5, 5, 5)]
+    [InlineData(5, 6, 21)]
+    [InlineData(10, 10, 1)]
+    [InlineData(10, 10, 10)]
+    [InlineData(10, 10, 88)]
+    [InlineData(10, 10, 91)]
+    [InlineData(40, 40, 1)]
+    [InlineData(40, 40, 25)]
+    [InlineData(40, 40, 1000)]
+    [InlineData(40, 40, 1590)]
+    [InlineData(40, 40, 1591)]
+    public void GivenCorrectSideLenghtAndNumberOfBlackHoles_When_CreateBoard_Then_NoError(int height, int width, int numberOfBlackHoles)
     {
         //Act
-        ProxxBoard board = new ProxxBoard(sideLength, numberOfBlackHoles);
+        ProxxBoard board = new ProxxBoard(height, width, numberOfBlackHoles);
 
         //Assert
         board.Should().NotBeNull();
@@ -62,7 +69,7 @@ public class ProxxBoardTests
         int numberOfBlackHoles = 30;
 
         //Act
-        ProxxBoard board = new ProxxBoard(sideLength, numberOfBlackHoles);
+        ProxxBoard board = new ProxxBoard(sideLength, sideLength, numberOfBlackHoles);
 
         //Assert
         int actualBlackHolesCount = board.Board.SelectMany(x => x).Count(x => x.IsBlackHole);
@@ -77,7 +84,7 @@ public class ProxxBoardTests
         int numberOfBlackHoles = 10;
 
         //Act
-        ProxxBoard board = new ProxxBoard(sideLength, numberOfBlackHoles);
+        ProxxBoard board = new ProxxBoard(sideLength, sideLength, numberOfBlackHoles);
 
         //Assert
         (ProxxCellWithLogic cellWithAdjacentBlackHoles, int cellI, int cellJ) = board.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.AdjacentBlackHolesNumber > 0);

@@ -13,7 +13,7 @@ public class ProxxGameTests
     public void Given_IncorrectParameters_When_CreateProxxGame_Then_ExceptionIsThrown()
     {
         //Act
-        Exception exception = Assert.ThrowsAny<Exception>(() => new ProxxGame(2, 100));
+        Exception exception = Assert.ThrowsAny<Exception>(() => new ProxxGame(2, 2, 100));
 
         //Assert
         exception.Should().NotBeNull();
@@ -23,46 +23,52 @@ public class ProxxGameTests
     public void Given_CorrectParameters_When_CreateProxxGame_Then_GameIsCreatedAndPropertiesAreAvailable()
     {
         //Arrange
-        const int sideLength = 10;
+        const int height = 10;
+        const int width = 15;
         const int numbersOfBlackHoles = 20;
 
         //Act
-        ProxxGame game = new ProxxGame(sideLength, numbersOfBlackHoles);
+        ProxxGame game = new ProxxGame(height, width, numbersOfBlackHoles);
 
         //Assert
-        game.SideLength.Should().Be(sideLength);
+        game.Height.Should().Be(height);
+        game.Width.Should().Be(width);
         game.NumberOfBlackHoles.Should().Be(numbersOfBlackHoles);
 
-        game.Board.Length.Should().Be(sideLength);
-        game.Board[0].Length.Should().Be(sideLength);
+        game.Board.Length.Should().Be(height);
+        game.Board[0].Length.Should().Be(width);
     }
 
-    [Fact]
-    public void Given_ProxxGame_When_ClickOnFieldWithInvalidParameters_Then_ExceptionIsThrown()
+    [Theory]
+    [InlineData(15, 4, "Height index was out of range of [0:10)")]
+    [InlineData(4, 15, "Width index was out of range of [0:10)")]
+    public void Given_ProxxGame_When_ClickOnFieldWithInvalidParameters_Then_ExceptionIsThrown(int i, int j, string expectedExceptionMessage)
     {
         //Arrange
-        ProxxGame game = new(10, 10);
+        ProxxGame game = new(10, 10, 10);
 
         //Act
         ProxxInvalidInputException exception = Assert.Throws<ProxxInvalidInputException>(() =>
-            game.ClickOnCell(15, 4));
+            game.ClickOnCell(i, j));
 
         //Assert
-        exception.Message.Should().Be("Index was out of range of [0:10)");
+        exception.Message.Should().Be(expectedExceptionMessage);
     }
 
     [Fact]
-    public void Given_ProxxGame_When_ClickOnAlreadyRevealed_Then_NothingToDoIsReturned()
+    public void Given_ProxxGame_When_ClickOnAlreadyRevealedNotEndGame_Then_NothingToDoIsReturned()
     {
         //Arrange
         const int sideLength = 10;
         const int numbersOfBlackHoles = 20;
-        ProxxGame game = new ProxxGame(sideLength, numbersOfBlackHoles);
+        ProxxGame game = new ProxxGame(sideLength, sideLength, numbersOfBlackHoles);
 
-        game.ClickOnCell(1, 1);
+        // cell with number so we definitely won't end the game on first move
+        (_, int i, int j) = game.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.AdjacentBlackHolesNumber > 0);
+        game.ClickOnCell(i, j);
 
         //Act
-        ClickOnFieldResultActionEnum result = game.ClickOnCell(1, 1);
+        ClickOnFieldResultActionEnum result = game.ClickOnCell(i, j);
 
         //Assert
         result.Should().Be(ClickOnFieldResultActionEnum.NothingToDo);
@@ -74,7 +80,7 @@ public class ProxxGameTests
         //Arrange
         const int sideLength = 10;
         const int numbersOfBlackHoles = 10;
-        ProxxGame game = new ProxxGame(sideLength, numbersOfBlackHoles);
+        ProxxGame game = new ProxxGame(sideLength, sideLength, numbersOfBlackHoles);
 
         (_, int i, int j) = game.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.AdjacentBlackHolesNumber == 0);
 
@@ -91,7 +97,7 @@ public class ProxxGameTests
         //Arrange
         const int sideLength = 10;
         const int numbersOfBlackHoles = 10;
-        ProxxGame game = new ProxxGame(sideLength, numbersOfBlackHoles);
+        ProxxGame game = new ProxxGame(sideLength, sideLength, numbersOfBlackHoles);
 
         (_, int i, int j) = game.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.AdjacentBlackHolesNumber > 0);
 
@@ -108,7 +114,7 @@ public class ProxxGameTests
         //Arrange
         const int sideLength = 10;
         const int numbersOfBlackHoles = 10;
-        ProxxGame game = new ProxxGame(sideLength, numbersOfBlackHoles);
+        ProxxGame game = new ProxxGame(sideLength, sideLength, numbersOfBlackHoles);
 
         (_, int i, int j) = game.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.IsBlackHole);
 
@@ -125,7 +131,7 @@ public class ProxxGameTests
         //Arrange
         const int sideLength = 5;
         const int numbersOfBlackHoles = 1;
-        ProxxGame game = new ProxxGame(sideLength, numbersOfBlackHoles);
+        ProxxGame game = new ProxxGame(sideLength, sideLength, numbersOfBlackHoles);
 
         // reveal all numbers
         foreach ((ProxxCell cellWithNumber, int cellI, int cellJ) in game.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).Where(x => x.cell.AdjacentBlackHolesNumber > 0))

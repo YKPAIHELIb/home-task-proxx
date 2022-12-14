@@ -16,11 +16,15 @@ internal class ProxxBoard
 
     // Ther requirements said that width and lenght should be the same (NxN board)
     // For the real game I'd prefer to separate width and lenght
-    public ProxxBoard(int sideLength, int numberOfBlackHoles)
+    public ProxxBoard(int height, int width, int numberOfBlackHoles)
     {
-        if (sideLength is < ConstMinSideLenght or > ConstMaxSideLenght)
+        if (height is < ConstMinSideLenght or > ConstMaxSideLenght)
         {
-            throw new ProxxInvalidInputException($"Side lenth is out of allowed ranges [{ConstMinSideLenght}, {ConstMaxSideLenght}]");
+            throw new ProxxInvalidInputException($"Height is out of allowed ranges [{ConstMinSideLenght}, {ConstMaxSideLenght}]");
+        }
+        if (width is < ConstMinSideLenght or > ConstMaxSideLenght)
+        {
+            throw new ProxxInvalidInputException($"Width is out of allowed ranges [{ConstMinSideLenght}, {ConstMaxSideLenght}]");
         }
         if (numberOfBlackHoles < 1)
         {
@@ -28,17 +32,17 @@ internal class ProxxBoard
         }
 
         // This valiidation rule comes from https://proxx.app/
-        int maxAllowedCountOfBlackHoles = sideLength * sideLength - 9;
+        int maxAllowedCountOfBlackHoles = height * width - 9;
         if (numberOfBlackHoles > maxAllowedCountOfBlackHoles)
         {
-            throw new ProxxInvalidInputException($"Number of black holes cannot be bigger than {maxAllowedCountOfBlackHoles} for {sideLength}x{sideLength} field");
+            throw new ProxxInvalidInputException($"Number of black holes cannot be bigger than {maxAllowedCountOfBlackHoles} for {height}x{width} field");
         }
 
         NumberOfBlackHoles = numberOfBlackHoles;
-        Board = new ProxxCellWithLogic[sideLength][];
+        Board = new ProxxCellWithLogic[height][];
         for (int i = 0; i < Board.Length; i++)
         {
-            Board[i] = new ProxxCellWithLogic[sideLength];
+            Board[i] = new ProxxCellWithLogic[width];
         }
 
         PopulateBoardWithCellsAndRandomBlackHoles(numberOfBlackHoles);
