@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Outreach.HomeTask.Proxx.Domain.Enums;
 using Outreach.HomeTask.Proxx.Domain.Exceptions;
+using Outreach.HomeTask.Proxx.Domain.Models;
 using Outreach.HomeTask.Proxx.Domain.Services;
 using Xunit;
 
@@ -116,5 +117,28 @@ public class ProxxGameTests
 
         //Assert
         result.Should().Be(ClickOnFieldResultActionEnum.GameOver);
+    }
+
+    [Fact]
+    public void Given_ProxxGameAlmostFinished_When_ClickOnLastCell_Then_GameWinIsReturned()
+    {
+        //Arrange
+        const int sideLength = 5;
+        const int numbersOfBlackHoles = 1;
+        ProxxGame game = new ProxxGame(sideLength, numbersOfBlackHoles);
+
+        // reveal all numbers
+        foreach ((ProxxCell cellWithNumber, int cellI, int cellJ) in game.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).Where(x => x.cell.AdjacentBlackHolesNumber > 0))
+        {
+            game.ClickOnCell(cellI, cellJ);
+        }
+
+        (ProxxCell emptyCell, int i, int j) = game.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.AdjacentBlackHolesNumber == 0);
+
+        //Act
+        ClickOnFieldResultActionEnum result = game.ClickOnCell(i, j);
+
+        //Assert
+        result.Should().Be(ClickOnFieldResultActionEnum.GameWin, "when click on empty cell while all number cells are revealed game should be finished");
     }
 }

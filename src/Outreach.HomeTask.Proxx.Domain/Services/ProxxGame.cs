@@ -30,12 +30,19 @@ public class ProxxGame : IProxxGame
         return _board.Board[i][j].Reveal() switch
         {
             RevealResultEnum.AlreadyRevealed => ClickOnFieldResultActionEnum.NothingToDo,
-            RevealResultEnum.EmptyCell => ClickOnFieldResultActionEnum.RedrawBoard,
-            RevealResultEnum.ContainsNumber => ClickOnFieldResultActionEnum.RedrawCell,
             RevealResultEnum.ContainsBlackHole => ClickOnFieldResultActionEnum.GameOver,
+            RevealResultEnum.EmptyCell => CheckWin() ? ClickOnFieldResultActionEnum.GameWin : ClickOnFieldResultActionEnum.RedrawBoard,
+            RevealResultEnum.ContainsNumber => CheckWin() ? ClickOnFieldResultActionEnum.GameWin : ClickOnFieldResultActionEnum.RedrawCell,
             _ => throw new Exception("Unreachable code")
-
-            // what's left is to write logic about GameWin response
         };
+    }
+
+    private bool CheckWin()
+    {
+        // if all cells except black holea are revealed then player is win
+        return _board.Board
+            .SelectMany(x => x)
+            .Where(x => !x.IsBlackHole)
+            .All(x => x.IsRevealed);
     }
 }

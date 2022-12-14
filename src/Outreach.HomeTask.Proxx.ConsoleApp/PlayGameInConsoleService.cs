@@ -33,10 +33,9 @@ public class PlayGameInConsoleService
                 - provide current state of game board via interface IProxxGame
                 - reveal specifig cell on board and keep revealed state
                 - recursievly reveal adjacent cells if hit on empty cell (with no adjancent black holes)
-                - return the hint of possible actions on each click on cell
+                - return the hint of possible actions for real game on each click on cell
 
             What can be improved:
-                - win handling
                 - generate the field after first click so user never hits the black hole on game start
                 - rectangular board (different width and height)
 
@@ -173,7 +172,7 @@ public class PlayGameInConsoleService
                 ClickOnFieldResultActionEnum.RedrawCell => "Cell became revealed. Redraw of cell might be needed.",
                 ClickOnFieldResultActionEnum.RedrawBoard => "Cell became revealed along with adjacent cells. Redraw of the board might be needed.",
                 ClickOnFieldResultActionEnum.GameOver => "Game over. Displaying the message to gamer might be needed.",
-                ClickOnFieldResultActionEnum.GameWin => "Not implemented for now.",
+                ClickOnFieldResultActionEnum.GameWin => "Game win. Displaying the message to gamer might be needed.",
                 _ => throw new Exception("Unreachable code")
             };
 
