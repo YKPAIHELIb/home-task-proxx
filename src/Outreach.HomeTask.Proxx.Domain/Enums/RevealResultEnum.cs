@@ -1,6 +1,6 @@
 ﻿namespace Outreach.HomeTask.Proxx.Domain.Enums;
 
-public enum RevealResultEnum
+internal enum RevealResultEnum
 {
     AlreadyRevealed,
     EmptyCell,

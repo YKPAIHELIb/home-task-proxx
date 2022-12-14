@@ -14,7 +14,7 @@ public class ProxxCellTests
     public void Given_IsBlackHoleValue_When_CreateProxxCell_Then_CellWithoutAdjacentBlackHolesNumberCreated(bool isBlackHole)
     {
         //Act
-        ProxxCell cell = new(isBlackHole);
+        ProxxCellWithLogic cell = new(isBlackHole);
 
         //Assert
         cell.IsBlackHole.Should().Be(isBlackHole);
@@ -32,8 +32,8 @@ public class ProxxCellTests
     public void Given_IncorrectNumberOfAdjacentCells_When_Initialize_Then_ExceptionIsThrown(int numberOfAdjacentCells)
     {
         //Arrange
-        List<ProxxCell> adjacentCells = CreateAdjacentCells(numberOfAdjacentCells, numberOfAdjacentCells);
-        ProxxCell cell = new(false);
+        List<ProxxCellWithLogic> adjacentCells = CreateAdjacentCells(numberOfAdjacentCells, numberOfAdjacentCells);
+        ProxxCellWithLogic cell = new(false);
 
         //Act
         ProxxInvalidInputException exception = Assert.Throws<ProxxInvalidInputException>(() =>
@@ -47,8 +47,8 @@ public class ProxxCellTests
     public void Given_BlackHoleCell_And_AdjacentCells_When_Initialize_Then_AdjacentBlackHolesNumberRemainsNull()
     {
         //Arrange
-        List<ProxxCell> adjacentCells = CreateAdjacentCells(8);
-        ProxxCell cell = new(true);
+        List<ProxxCellWithLogic> adjacentCells = CreateAdjacentCells(8);
+        ProxxCellWithLogic cell = new(true);
 
         //Act
         cell.Initialize(adjacentCells);
@@ -62,8 +62,8 @@ public class ProxxCellTests
     public void Given_NotBlackHoleCell_And_AdjacentCells_When_Initialize_Then_AdjacentBlackHolesNumberIsAssigned(int numberOfAdjacentBlackHoles)
     {
         //Arrange
-        List<ProxxCell> adjacentCells = CreateAdjacentCells(numberOfAdjacentBlackHoles);
-        ProxxCell cell = new(false);
+        List<ProxxCellWithLogic> adjacentCells = CreateAdjacentCells(numberOfAdjacentBlackHoles);
+        ProxxCellWithLogic cell = new(false);
 
         //Act
         cell.Initialize(adjacentCells);
@@ -76,7 +76,7 @@ public class ProxxCellTests
     public void Given_NotInitializedCell_When_Reveal_Then_ExceptionIsThrown()
     {
         //Arrange
-        ProxxCell cell = new(true);
+        ProxxCellWithLogic cell = new(true);
 
         //Act
         ProxxCellNotInitializedException exception = Assert.Throws<ProxxCellNotInitializedException>(() =>
@@ -90,7 +90,7 @@ public class ProxxCellTests
     public void Given_AlreadyRevealedCell_When_Reveal_Then_AlreadyRevealedIsReturned()
     {
         //Arrange
-        ProxxCell cell = new(false);
+        ProxxCellWithLogic cell = new(false);
         cell.Initialize(CreateAdjacentCells(4));
         cell.Reveal();
 
@@ -106,7 +106,7 @@ public class ProxxCellTests
     public void Given_BlackHoleCell_When_Reveal_Then_ContainsBlackHoleIsReturned()
     {
         //Arrange
-        ProxxCell cell = new(true);
+        ProxxCellWithLogic cell = new(true);
         cell.Initialize(CreateAdjacentCells(4));
 
         //Act
@@ -122,7 +122,7 @@ public class ProxxCellTests
     public void Given_CellWithAdjacentBlackHoles_When_Reveal_Then_ContainsNumberIsReturned(int numberOfAdjacentBlackHoles)
     {
         //Arrange
-        ProxxCell cell = new(false);
+        ProxxCellWithLogic cell = new(false);
         cell.Initialize(CreateAdjacentCells(numberOfAdjacentBlackHoles));
 
         //Act
@@ -137,7 +137,7 @@ public class ProxxCellTests
     public void Given_CellWithoutAdjacentBlackHoles_And_UninitializedAdjacentCells_When_Reveal_Then_ExceptionIsThrown()
     {
         //Arrange
-        ProxxCell cell = new(false);
+        ProxxCellWithLogic cell = new(false);
         cell.Initialize(CreateAdjacentCells(0));
 
         //Act
@@ -152,10 +152,10 @@ public class ProxxCellTests
     public void Given_CellWithoutAdjacentBlackHoles_When_Reveal_Then_EmptyCellIsReturned_And_AllAdjacentCellsAreRevealed()
     {
         //Arrange
-        ProxxCell cell = new(false);
-        List<ProxxCell> adjacentCells = CreateAdjacentCells(0);
+        ProxxCellWithLogic cell = new(false);
+        List<ProxxCellWithLogic> adjacentCells = CreateAdjacentCells(0);
         cell.Initialize(adjacentCells);
-        foreach (ProxxCell adjacentCell in adjacentCells)
+        foreach (ProxxCellWithLogic adjacentCell in adjacentCells)
         {
             adjacentCell.Initialize(CreateAdjacentCells(2)); // we should initialize to be able to reveal
         }
@@ -174,16 +174,16 @@ public class ProxxCellTests
     public void Given_CellWithoutAdjacentBlackHoles_And_AdjacentCellWithoutAdjacentBlackHoles_When_Reveal_Then_CellsAreRevealedRecursively()
     {
         //Arrange
-        ProxxCell cell = new(false);
-        List<ProxxCell> adjacentCells = CreateAdjacentCells(0);
+        ProxxCellWithLogic cell = new(false);
+        List<ProxxCellWithLogic> adjacentCells = CreateAdjacentCells(0);
         cell.Initialize(adjacentCells);
 
-        List<ProxxCell> allFurtherAdjacentCells = new();
-        foreach (ProxxCell adjacentCell in adjacentCells)
+        List<ProxxCellWithLogic> allFurtherAdjacentCells = new();
+        foreach (ProxxCellWithLogic adjacentCell in adjacentCells)
         {
-            List<ProxxCell> furtherAdjacentCells = CreateAdjacentCells(0);
+            List<ProxxCellWithLogic> furtherAdjacentCells = CreateAdjacentCells(0);
             adjacentCell.Initialize(furtherAdjacentCells); // we should initialize to be able to reveal
-            foreach (ProxxCell furtherAdjacentCell in furtherAdjacentCells)
+            foreach (ProxxCellWithLogic furtherAdjacentCell in furtherAdjacentCells)
             {
                 furtherAdjacentCell.Initialize(CreateAdjacentCells(1)); // end of recursion as it's not "empty" cell
             }
@@ -202,9 +202,9 @@ public class ProxxCellTests
         allFurtherAdjacentCells.Should().AllBeEquivalentTo(new { IsRevealed = true });
     }
 
-    private static List<ProxxCell> CreateAdjacentCells(int blackHolesCount, int allCellsCount = 8)
+    private static List<ProxxCellWithLogic> CreateAdjacentCells(int blackHolesCount, int allCellsCount = 8)
     {
-        return Enumerable.Range(0, allCellsCount).Select(i => new ProxxCell(i < blackHolesCount)).ToList();
+        return Enumerable.Range(0, allCellsCount).Select(i => new ProxxCellWithLogic(i < blackHolesCount)).ToList();
     }
 
     private static IEnumerable<object[]> AllCorrectNumbersOfAdjacentBlackHoles() => new[]

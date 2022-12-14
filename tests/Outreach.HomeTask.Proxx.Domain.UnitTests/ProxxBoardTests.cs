@@ -80,18 +80,18 @@ public class ProxxBoardTests
         ProxxBoard board = new ProxxBoard(sideLength, numberOfBlackHoles);
 
         //Assert
-        (ProxxCell cellWithAdjacentBlackHoles, int cellI, int cellJ) = board.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.AdjacentBlackHolesNumber > 0);
-        List<ProxxCell> adjencentCells = GetAdjacentCellsForPosition(board.Board, cellI, cellJ);
+        (ProxxCellWithLogic cellWithAdjacentBlackHoles, int cellI, int cellJ) = board.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.AdjacentBlackHolesNumber > 0);
+        List<ProxxCellWithLogic> adjencentCells = GetAdjacentCellsForPosition(board.Board, cellI, cellJ);
         adjencentCells.Count(x => x.IsBlackHole).Should().Be(cellWithAdjacentBlackHoles.AdjacentBlackHolesNumber);
 
-        (ProxxCell cellWithoutAdjacentBlackHoles, cellI, cellJ) = board.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.AdjacentBlackHolesNumber == 0);
+        (ProxxCellWithLogic cellWithoutAdjacentBlackHoles, cellI, cellJ) = board.Board.SelectMany((row, i) => row.Select((cell, j) => (cell, i, j))).First(x => x.cell.AdjacentBlackHolesNumber == 0);
         adjencentCells = GetAdjacentCellsForPosition(board.Board, cellI, cellJ);
         adjencentCells.Count(x => x.IsBlackHole).Should().Be(0);
     }
 
-    private static List<ProxxCell> GetAdjacentCellsForPosition(ProxxCell[][] board, int centerI, int centerJ)
+    private static List<ProxxCellWithLogic> GetAdjacentCellsForPosition(ProxxCellWithLogic[][] board, int centerI, int centerJ)
     {
-        List<ProxxCell> adjacentCells = new();
+        List<ProxxCellWithLogic> adjacentCells = new();
         for (int i = centerI - 1; i <= centerI + 1; i++)
         {
             for (int j = centerJ - 1; j <= centerJ + 1; j++)

@@ -1,15 +1,17 @@
-﻿using Outreach.HomeTask.Proxx.Domain.Exceptions;
+﻿using System.Runtime.CompilerServices;
+using Outreach.HomeTask.Proxx.Domain.Exceptions;
 using Outreach.HomeTask.Proxx.Domain.Helpers;
 
+[assembly: InternalsVisibleTo("Outreach.HomeTask.Proxx.Domain.UnitTests")]
 namespace Outreach.HomeTask.Proxx.Domain.Models;
 
-public class ProxxBoard
+internal class ProxxBoard
 {
     // nubers taken from validation of inputs in https://proxx.app/
     private const int ConstMinSideLenght = 5;
     private const int ConstMaxSideLenght = 40;
 
-    public ProxxCell[][] Board { get; set; }
+    public ProxxCellWithLogic[][] Board { get; set; }
     public int NumberOfBlackHoles { get; }
 
     // Ther requirements said that width and lenght should be the same (NxN board)
@@ -33,10 +35,10 @@ public class ProxxBoard
         }
 
         NumberOfBlackHoles = numberOfBlackHoles;
-        Board = new ProxxCell[sideLength][];
+        Board = new ProxxCellWithLogic[sideLength][];
         for (int i = 0; i < Board.Length; i++)
         {
-            Board[i] = new ProxxCell[sideLength];
+            Board[i] = new ProxxCellWithLogic[sideLength];
         }
 
         PopulateBoardWithCellsAndRandomBlackHoles(numberOfBlackHoles);
@@ -55,7 +57,7 @@ public class ProxxBoard
             for (int j = 0; j < lenghtForJ; j++)
             {
                 bool isBlackHole = blackHolesPositions.Contains(i * lenghtForJ + j);
-                Board[i][j] = new ProxxCell(isBlackHole);
+                Board[i][j] = new ProxxCellWithLogic(isBlackHole);
             }
         }
     }
@@ -69,15 +71,15 @@ public class ProxxBoard
         {
             for (int j = 0; j < lenghtForJ; j++)
             {
-                ProxxCell cell = Board[i][j];
+                ProxxCellWithLogic cell = Board[i][j];
                 cell.Initialize(GetAdjacentCellsForPosition(i, j));
             }
         }
 
         // LOCAL FUNCTIONS
-        List<ProxxCell> GetAdjacentCellsForPosition(int centerI, int centerJ)
+        List<ProxxCellWithLogic> GetAdjacentCellsForPosition(int centerI, int centerJ)
         {
-            List<ProxxCell> adjacentCells = new();
+            List<ProxxCellWithLogic> adjacentCells = new();
             for (int i = centerI - 1; i <= centerI + 1; i++)
             {
                 for (int j = centerJ - 1; j <= centerJ + 1; j++)
