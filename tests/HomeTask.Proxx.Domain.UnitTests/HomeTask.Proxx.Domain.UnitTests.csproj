@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Outreach.HomeTask.Proxx.Domain\Outreach.HomeTask.Proxx.Domain.csproj" />
+    <ProjectReference Include="..\..\src\HomeTask.Proxx.Domain\HomeTask.Proxx.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Outreach.HomeTask.Proxx.Domain\Outreach.HomeTask.Proxx.Domain.csproj" />
+    <ProjectReference Include="..\HomeTask.Proxx.Domain\HomeTask.Proxx.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace Outreach.HomeTask.Proxx.Domain.Enums;
+﻿namespace HomeTask.Proxx.Domain.Enums;
 
 public enum ClickOnFieldResultActionEnum
 {

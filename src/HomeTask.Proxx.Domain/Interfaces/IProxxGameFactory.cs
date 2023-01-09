@@ -1,4 +1,4 @@
-﻿namespace Outreach.HomeTask.Proxx.Domain.Interfaces;
+﻿namespace HomeTask.Proxx.Domain.Interfaces;
 
 public interface IProxxGameFactory
 {

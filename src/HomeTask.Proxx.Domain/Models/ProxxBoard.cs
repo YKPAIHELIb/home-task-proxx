@@ -1,9 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
-using Outreach.HomeTask.Proxx.Domain.Exceptions;
-using Outreach.HomeTask.Proxx.Domain.Helpers;
+using HomeTask.Proxx.Domain.Exceptions;
+using HomeTask.Proxx.Domain.Helpers;
 
-[assembly: InternalsVisibleTo("Outreach.HomeTask.Proxx.Domain.UnitTests")]
-namespace Outreach.HomeTask.Proxx.Domain.Models;
+[assembly: InternalsVisibleTo("HomeTask.Proxx.Domain.UnitTests")]
+namespace HomeTask.Proxx.Domain.Models;
 
 internal class ProxxBoard
 {

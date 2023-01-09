@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
-using Outreach.HomeTask.Proxx.Domain.Exceptions;
-using Outreach.HomeTask.Proxx.Domain.Models;
+using HomeTask.Proxx.Domain.Exceptions;
+using HomeTask.Proxx.Domain.Models;
 using Xunit;
 
-namespace Outreach.HomeTask.Proxx.Domain.UnitTests;
+namespace HomeTask.Proxx.Domain.UnitTests;
 
 public class ProxxBoardTests
 {

@@ -1,4 +1,4 @@
-﻿namespace Outreach.HomeTask.Proxx.Domain.Exceptions;
+﻿namespace HomeTask.Proxx.Domain.Exceptions;
 
 public class ProxxCellNotInitializedException : Exception
 {

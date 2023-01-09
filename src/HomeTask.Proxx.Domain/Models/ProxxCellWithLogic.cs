@@ -1,9 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
-using Outreach.HomeTask.Proxx.Domain.Enums;
-using Outreach.HomeTask.Proxx.Domain.Exceptions;
+using HomeTask.Proxx.Domain.Enums;
+using HomeTask.Proxx.Domain.Exceptions;
 
-[assembly: InternalsVisibleTo("Outreach.HomeTask.Proxx.Domain.UnitTests")]
-namespace Outreach.HomeTask.Proxx.Domain.Models;
+[assembly: InternalsVisibleTo("HomeTask.Proxx.Domain.UnitTests")]
+namespace HomeTask.Proxx.Domain.Models;
 
 internal sealed class ProxxCellWithLogic : ProxxCell
 {

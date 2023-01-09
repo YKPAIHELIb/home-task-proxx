@@ -1,9 +1,9 @@
-﻿using Outreach.HomeTask.Proxx.Domain.Enums;
-using Outreach.HomeTask.Proxx.Domain.Exceptions;
-using Outreach.HomeTask.Proxx.Domain.Interfaces;
-using Outreach.HomeTask.Proxx.Domain.Models;
+﻿using HomeTask.Proxx.Domain.Enums;
+using HomeTask.Proxx.Domain.Exceptions;
+using HomeTask.Proxx.Domain.Interfaces;
+using HomeTask.Proxx.Domain.Models;
 
-namespace Outreach.HomeTask.Proxx.Domain.Services;
+namespace HomeTask.Proxx.Domain.Services;
 
 public class ProxxGame : IProxxGame
 {

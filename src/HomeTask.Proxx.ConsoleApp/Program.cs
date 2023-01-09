@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Outreach.HomeTask.Proxx.ConsoleApp;
-using Outreach.HomeTask.Proxx.Domain.Interfaces;
-using Outreach.HomeTask.Proxx.Domain.Services;
+using HomeTask.Proxx.ConsoleApp;
+using HomeTask.Proxx.Domain.Interfaces;
+using HomeTask.Proxx.Domain.Services;
 
 IHost host = Host.CreateDefaultBuilder()
     .ConfigureServices(services => services

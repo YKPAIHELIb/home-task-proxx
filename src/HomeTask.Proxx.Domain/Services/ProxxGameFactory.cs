@@ -1,6 +1,6 @@
-﻿using Outreach.HomeTask.Proxx.Domain.Interfaces;
+﻿using HomeTask.Proxx.Domain.Interfaces;
 
-namespace Outreach.HomeTask.Proxx.Domain.Services;
+namespace HomeTask.Proxx.Domain.Services;
 
 public class ProxxGameFactory : IProxxGameFactory
 {

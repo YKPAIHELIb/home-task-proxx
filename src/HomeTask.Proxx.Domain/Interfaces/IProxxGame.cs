@@ -1,7 +1,7 @@
-﻿using Outreach.HomeTask.Proxx.Domain.Enums;
-using Outreach.HomeTask.Proxx.Domain.Models;
+﻿using HomeTask.Proxx.Domain.Enums;
+using HomeTask.Proxx.Domain.Models;
 
-namespace Outreach.HomeTask.Proxx.Domain.Interfaces;
+namespace HomeTask.Proxx.Domain.Interfaces;
 
 public interface IProxxGame
 {

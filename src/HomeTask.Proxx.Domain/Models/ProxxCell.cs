@@ -1,4 +1,4 @@
-﻿namespace Outreach.HomeTask.Proxx.Domain.Models;
+﻿namespace HomeTask.Proxx.Domain.Models;
 
 public class ProxxCell
 {

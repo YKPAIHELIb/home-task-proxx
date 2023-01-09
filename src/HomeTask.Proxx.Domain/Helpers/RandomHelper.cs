@@ -1,4 +1,4 @@
-﻿namespace Outreach.HomeTask.Proxx.Domain.Helpers;
+﻿namespace HomeTask.Proxx.Domain.Helpers;
 
 public static class RandomHelper
 {
